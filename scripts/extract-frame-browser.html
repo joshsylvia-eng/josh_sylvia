@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extract Video Frame</title>
+</head>
+<body>
+    <h2>Extracting First Frame from Video...</h2>
+    <video id="video" style="display:none;" crossorigin="anonymous">
+        <source src="/images/Video.mov" type="video/mp4">
+    </video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <div id="status">Loading video...</div>
+    
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        
+        video.addEventListener('loadedmetadata', function() {
+            status.textContent = 'Video loaded, extracting frame...';
+            
+            // Set canvas size to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Seek to the first frame
+            video.currentTime = 0;
+        });
+        
+        video.addEventListener('seeked', function() {
+            // Draw the current frame to canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert to image and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'video-frame-thumbnail.jpg';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                
+                status.textContent = 'Frame extracted! Check your downloads folder.';
+                status.innerHTML += '<br><br>Save this file as: public/images/video-frame-thumbnail.jpg';
+                
+                // Also show the extracted frame
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.maxWidth = '400px';
+                img.style.border = '1px solid #ccc';
+                document.body.appendChild(img);
+            }, 'image/jpeg', 0.9);
+        });
+        
+        video.addEventListener('error', function(e) {
+            status.textContent = 'Error loading video: ' + e.message;
+            status.innerHTML += '<br><br>Please ensure the video file exists at: /images/Video.mov';
+        });
+        
+        // Load the video
+        video.load();
+    </script>
+</body>
+</html>
