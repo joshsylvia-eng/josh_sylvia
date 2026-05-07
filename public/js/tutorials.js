@@ -384,70 +384,36 @@ function renderContentGrid(content) {
 }
 
 function createTile(item) {
-    const tile = document.createElement('div');
-    tile.className = 'tile';
-    
-    // Add featured class if applicable
-    if (item.is_featured) {
-        tile.classList.add('tile-featured');
-    }
-    
-    // Create header
-    const header = document.createElement('div');
-    header.className = 'tile-header';
-    header.innerHTML = `<h3>${item.title}</h3>`;
-    
-    tile.appendChild(header);
-    
-    if (item.type === 'video') {
-        // Use video file as thumbnail (will show first frame when loaded)
-        const thumbnailUrl = item.file_path;
-        
-        const videoElement = document.createElement('div');
-        videoElement.className = 'tile-video';
-        
-        const videoThumbnail = document.createElement('video');
-        videoThumbnail.src = thumbnailUrl;
-        videoThumbnail.alt = item.title;
-        videoThumbnail.className = 'video-thumbnail';
-        videoThumbnail.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
-        `;
-        
-        videoElement.appendChild(videoThumbnail);
-        tile.appendChild(videoElement);
-    } else if (item.type === 'github') {
-        return `
-            <div class="tile" 
-                 onclick="openModal('${item.type}', '${item.title}', '${item.description}', '${item.file_path}', '${item.location}', '${item.created_at}', ${JSON.stringify(item.tags || [])})"
-                 data-video-url="${item.file_path}">
-                <div class="tile-github">
-                    <i class="fab fa-github"></i>
-                </div>
-                <div class="tile-content">
-                    <h3 class="tile-title">${item.title}</h3>
-                    <p class="tile-description">${item.description}</p>
-                    <div class="tile-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> ${item.location}</span>
-                        <span><i class="fas fa-calendar"></i> ${item.created_at}</span>
-                    </div>
-                    ${item.tags && item.tags.length > 0 ? `
-                        <div class="tile-tags">
-                            ${item.tags.map(tag => `<span class="tile-tag">${tag}</span>`).join('')}
-                        </div>
-                    ` : ''}
-                </div>
+    return `
+        <div class="tile" 
+             onclick="openModal('${item.type}', '${item.title}', '${item.description}', '${item.file_path}', '${item.location}', '${item.created_at}', ${JSON.stringify(item.tags || [])})"
+             data-video-url="${item.file_path}">
+            <div class="tile-video">
+                <video src="${item.file_path}" alt="${item.title}" class="video-thumbnail" style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    pointer-events: none;
+                "></video>
             </div>
-        `;
-    }
-    
-    return tile.outerHTML;
+            <div class="tile-content">
+                <h3 class="tile-title">${item.title}</h3>
+                <p class="tile-description">${item.description}</p>
+                <div class="tile-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> ${item.location}</span>
+                    <span><i class="fas fa-calendar"></i> ${item.created_at}</span>
+                </div>
+                ${item.tags && item.tags.length > 0 ? `
+                    <div class="tile-tags">
+                        ${item.tags.map(tag => `<span class="tile-tag">${tag}</span>`).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
 }
 
 // Add hover video functionality to tiles
