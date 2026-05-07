@@ -77,9 +77,6 @@ typings/
 
 # Next.js build output
 .next
-
-# Nuxt.js build / generate output
-.nuxt
 dist
 
 # Gatsby files
@@ -99,15 +96,14 @@ dist
 
 # DynamoDB Local files
 .dynamodb/
+*.sqlite
+*.mdb
+*.accdb
+*.dbf
 
 # TernJS port file
 .tern-port
 
-# Private folder - contains sensitive personal files
-private/
-
-# Security and sensitive data
-*.key
 *.pem
 *.p12
 *.pfx
