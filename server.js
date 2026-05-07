@@ -42,6 +42,32 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+
+// Videos API endpoint
+app.get('/api/videos', async (req, res) => {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const videosDataFile = path.join(__dirname, 'public', 'data', 'videos.json');
+    
+    // Read videos from JSON file
+    if (fs.existsSync(videosDataFile)) {
+      const videosData = fs.readFileSync(videosDataFile, 'utf8');
+      const videos = JSON.parse(videosData);
+      res.json(videos);
+    } else {
+      // Return empty array if file doesn't exist
+      res.json([]);
+    }
+  } catch (error) {
+    console.error('Error fetching videos:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to fetch videos' 
+    });
+  }
+});
+
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
   try {

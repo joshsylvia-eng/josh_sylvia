@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Python Tutorial",
+    "description": "Learn Python programming from basics to advanced concepts with hands-on examples.",
+    "youtube_id": "",
+    "location": "Programming Tutorial",
+    "tags": ["python", "programming", "development"],
+    "is_featured": false,
+    "type": "video",
+    "file_path": "/videos/python_tutorial.mp4",
+    "file_size": 0,
+    "duration": 0
+  },
+  {
+    "title": "JavaScript Tutorial",
+    "description": "Complete JavaScript tutorial covering ES6+ features and modern development practices.",
+    "youtube_id": "",
+    "location": "Web Development Tutorial",
+    "tags": ["javascript", "web development", "es6"],
+    "type": "video",
+    "file_path": "/videos/javascript_tutorial.mp4",
+    "file_size": 0,
+    "duration": 0
+  },
+  {
+    "title": "CISSP Certification Complete Course",
+    "description": "Complete CISSP exam preparation covering all 8 domains. Learn security and risk management, asset security, and more.",
+    "youtube_id": "_nyZhYnCNLA",
+    "location": "Certification Tutorial",
+    "tags": [
+      "cissp",
+      "certification",
+      "cybersecurity",
+      "security"
+    ],
+    "is_featured": true,
+    "type": "video",
+    "file_path": "/videos/cissp_certification_complete_course.mp4",
+    "file_size": 558394978,
+    "duration": 0
+  },
+  {
+    "title": "AWS Security Best Practices",
+    "description": "Hands-on AWS security best practices guide. Learn IAM, security groups, encryption, and compliance on AWS.",
+    "youtube_id": "awdQ6GjfMEA",
+    "location": "Cloud Security Tutorial",
+    "tags": [
+      "aws",
+      "security",
+      "cloud",
+      "best practices"
+    ],
+    "type": "video",
+    "file_path": "/videos/aws_security_best_practices.mp4",
+    "file_size": 101351513,
+    "duration": 0
+  },
+  {
+    "title": "React TypeScript Tutorial",
+    "description": "Learn React with TypeScript from scratch. Build type-safe React applications with modern development practices.",
+    "youtube_id": "s_o8dwzRlu4",
+    "location": "Frontend Tutorial",
+    "tags": [
+      "react",
+      "typescript",
+      "javascript",
+      "frontend"
+    ],
+    "type": "video",
+    "file_path": "/videos/react_typescript_tutorial.mp4",
+    "file_size": 372877221,
+    "duration": 0
+  },
+  {
+    "title": "Linux System Administration",
+    "description": "Complete Linux system administration guide. Learn user management, file systems, networking, and server maintenance.",
+    "youtube_id": "d6WC5n9G_sM",
+    "location": "Linux Tutorial",
+    "tags": [
+      "linux",
+      "administration",
+      "server",
+      "systems"
+    ],
+    "type": "video",
+    "file_path": "/videos/linux_system_administration.mp4",
+    "file_size": 555689254,
+    "duration": 0
+  },
+  {
+    "title": "Network Security Fundamentals",
+    "description": "Learn network security concepts including firewalls, VPNs, intrusion detection, and secure network design.",
+    "youtube_id": "tyPPfS1lwFg",
+    "location": "Network Security",
+    "tags": [
+      "network security",
+      "firewall",
+      "vpn",
+      "monitoring"
+    ],
+    "type": "video",
+    "file_path": "/videos/network_security_fundamentals.mp4",
+    "file_size": 63283600,
+    "duration": 0
+  },
+  {
+    "title": "Python for Cybersecurity",
+    "description": "Write Python scripts for cybersecurity automation. Covers penetration testing, vulnerability scanning, and security tools.",
+    "youtube_id": "cjdIIwUZsAg",
+    "location": "Security Programming",
+    "tags": [
+      "python",
+      "cybersecurity",
+      "automation",
+      "scripting"
+    ],
+    "type": "video",
+    "file_path": "/videos/python_for_cybersecurity.mp4",
+    "file_size": 7852514,
+    "duration": 0
+  }
+]
