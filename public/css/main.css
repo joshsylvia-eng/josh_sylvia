@@ -4,8 +4,13 @@
   --dark-color : #270b75;
   --dark-color2 : #750b0b;
   --dark-color3 : #1f471f;
-  --light-color : #c72b04;
-  --light-color2 : beige;
+  --light-color : #4A90E2;
+  --light-color2 : #357ABD;
+  
+  /* Light Blue Navigation Colors */
+  --primary-color: #4A90E2;
+  --secondary-color: #357ABD;
+  --accent-color: #2E7CD6;
 }
 
 #grid_content {
@@ -39,7 +44,7 @@ main p {
 .logo-container {
   display: inline-block;
   padding: 3px;
-  background: linear-gradient(45deg, #ff6b35, #ff4500, #dc143c);
+  background: linear-gradient(45deg, #4fb3f7, #2852dd, #022175);
   border-radius: 50%;
   transition: transform 0.3s ease;
 }

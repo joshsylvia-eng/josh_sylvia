@@ -105,3 +105,96 @@ dist
 
 # Private folder - contains sensitive personal files
 private/
+
+# Security and sensitive data
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.p7b
+*.p7c
+*.p7s
+*.p7m
+*.p7r
+*.p7z
+*.asc
+*.gpg
+*.pgp
+*.sig
+*.sign
+*.signature
+*.der
+*.csr
+*.crl
+*.pem
+*.p10
+*.p12
+*.p7b
+*.p7c
+*.p7s
+*.p7m
+*.p7r
+*.p7z
+*.asc
+*.gpg
+*.pgp
+*.sig
+*.sign
+*.signature
+*.der
+*.csr
+*.crl
+
+# API keys and secrets
+api-keys.txt
+secrets.txt
+credentials.txt
+passwords.txt
+config/secrets/
+config/credentials/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.mdb
+*.accdb
+*.dbf
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-*
+*.atom/
+.brackets.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

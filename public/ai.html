@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Josh Sylvia Tech - AI Solutions</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="module">
+    import OpenAI from 'https://cdn.skypack.dev/openai';
+    window.OpenAI = OpenAI;
+</script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* Make favicon circular */
+        link[rel="icon"] {
+            border-radius: 50%;
+        }
+    </style>
+    <style>
+        /* CSS Variables for Navigation */
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #357ABD;
+            --accent-color: #2E7CD6;
+        }
+
+        /* Navigation Styles - Add these to ensure navbar works */
+        .top-nav {
+            background: linear-gradient(135deg, #4A90E2, #357ABD);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-container img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+            padding: 5px 0;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            opacity: 0.8;
+            border-bottom: 2px solid white;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 10px 0;
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            color: var(--primary-color);
+        }
+
+        /* Add padding for fixed navbar */
+        body {
+            padding-top: 70px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+        }
+
+        /* AI Page Specific Styles */
+        .ai-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/circuit.png');
+            opacity: 0.1;
+        }
+
+        .ai-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .ai-hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .ai-sections {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .ai-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .ai-section {
+            margin-bottom: 60px;
+        }
+
+        .ai-section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .ai-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ai-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .ai-card-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .ai-card-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+
+        .ai-card-description {
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .chatbot-section {
+            background: linear-gradient(135deg, #28a745 0%, #20bf6b 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .chatbot-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .chatbot-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .chatbot-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .chatbot-interface {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-field {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+
+        .chat-send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .chat-send-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .mcp-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+
+        .mcp-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .mcp-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .mcp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .mcp-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .mcp-card-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .mcp-card-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .mcp-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .mcp-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .mcp-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .docker-info {
+            background: #e9ecef;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            border-left: 4px solid #007bff;
+        }
+
+        .docker-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .docker-description {
+            color: #666;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .ai-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mcp-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-input {
+                flex-direction: column;
+            }
+
+            .chat-messages {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Component -->
+    <div id="navigation-container"></div>
+
+    <!-- AI Hero Section -->
+    <section class="ai-hero">
+        <div class="ai-hero-content">
+            <h1 class="ai-hero-title">AI & Automation Solutions</h1>
+            <p class="ai-hero-subtitle">
+                Harnessing the power of artificial intelligence to build intelligent, scalable solutions for modern challenges
+            </p>
+        </div>
+    </section>
+
+    <!-- ... -->
+    </section>
+
+    <!-- MCP Integration Section -->
+    <section class="mcp-section">
+        <div class="mcp-container">
+            <h2 class="mcp-title">Model Context Protocol (MCP) Integration</h2>
+            <div class="mcp-grid">
+                <div class="mcp-card">
+                    <h3 class="mcp-card-title">MCP Server Status</h3>
+                    <p class="mcp-card-description">
+                        Docker container running MCP server for seamless AI model integration and context management.
+                    </p>
+                    <span class="mcp-status connected">Connected</span>
+                </div>
+                <div class="mcp-card">
+                    <h3 class="mcp-card-title">Available Models</h3>
+                    <p class="mcp-card-description">
+                        Multiple AI models available through MCP protocol for different use cases and specializations.
+                    </p>
+                    <span class="mcp-status connected">Active</span>
+                </div>
+                <div class="mcp-card">
+                    <h3 class="mcp-card-title">Context Management</h3>
+                    <p class="mcp-card-description">
+                        Intelligent context sharing between AI models and applications for consistent, informed responses.
+                    </p>
+                    <span class="mcp-status connected">Enabled</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RAG Implementation Section -->
+    <section class="mcp-section">
+        <div class="mcp-container">
+            <h2 class="mcp-title">Retrieval-Augmented Generation (RAG)</h2>
+            <div class="mcp-grid">
+                <div class="mcp-card">
+                    <h3 class="mcp-card-title">Knowledge Base</h3>
+                    <p class="mcp-card-description">
+                        Comprehensive knowledge base covering cybersecurity, cloud architecture, DevOps, and AI development with 12+ specialized documents.
+                    </p>
+                    <span class="mcp-status connected">Active</span>
+                </div>
+                <div class="mcp-card">
+                    <h3 class="mcp-card-title">Document Retrieval</h3>
+                    <p class="mcp-card-description">
+                        Intelligent document retrieval system that matches user queries with relevant expertise content using keyword and semantic analysis.
+                    </p>
+                    <span class="mcp-status connected">Enabled</span>
+                </div>
+                <div class="mcp-card">
+                    <h3 class="mcp-card-title">Context-Aware Responses</h3>
+                    <p class="mcp-card-description">
+                        Dynamic system prompts that inject retrieved context into LLM requests for accurate, detailed responses about Josh's technical expertise.
+                    </p>
+                    <span class="mcp-status connected">Optimized</span>
+                </div>
+            </div>
+            
+            <div class="docker-info" style="margin-top: 30px;">
+                <h3 class="docker-title">RAG Architecture</h3>
+                <div class="docker-description">
+                    <strong>Process:</strong> User Query → Document Retrieval → Context Injection → LLM Response<br>
+                    <strong>Knowledge Areas:</strong> Cybersecurity, Cloud Architecture, DevOps, AI Development<br>
+                    <strong>Retrieval Method:</strong> Keyword matching + content analysis + relevance scoring<br>
+                    <strong>Integration:</strong> Real-time context injection with Groq's llama-3.1-8b-instant model<br>
+                    <strong>Performance:</strong> Sub-second document retrieval with enhanced response accuracy
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Section -->
+    <section class="chatbot-section">
+        <div class="chatbot-container">
+            <h2 class="chatbot-title">Interactive AI Assistant</h2>
+            <p class="chatbot-description">
+                Experience the power of AI with our interactive chatbot. Ask questions about technology, get help with coding, or explore AI capabilities.
+            </p>
+            <div class="chatbot-interface">
+                <div class="chat-messages" id="chatMessages">
+                    <div style="text-align: center; color: #666; padding: 20px;">
+                        <i class="fas fa-robot" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>AI Assistant is ready to help!</p>
+                        <p style="font-size: 0.9rem; opacity: 0.8;">Connected via Docker container with MCP integration</p>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" class="chat-input-field" id="chatInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+                    <button class="chat-send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // RAG Knowledge Base for Josh Sylvia's Expertise
+        const knowledgeBase = {
+            cybersecurity: [
+                {
+                    title: "Network Security Fundamentals",
+                    content: "Josh Sylvia specializes in network security architecture, including firewall configuration, intrusion detection systems, and zero-trust security models. Expert in implementing comprehensive security frameworks for enterprise environments.",
+                    keywords: ["network", "security", "firewall", "intrusion", "zero-trust"]
+                },
+                {
+                    title: "Cloud Security Best Practices",
+                    content: "Extensive experience in securing cloud infrastructure across AWS, Azure, and GCP. Implements cloud-native security solutions, identity and access management, and compliance frameworks like SOC 2 and ISO 27001.",
+                    keywords: ["cloud", "aws", "azure", "gcp", "compliance", "soc2", "iso27001"]
+                },
+                {
+                    title: "Penetration Testing",
+                    content: "Certified penetration tester with expertise in identifying vulnerabilities in web applications, mobile apps, and network infrastructure. Proficient in using tools like Burp Suite, Metasploit, and custom security assessment methodologies.",
+                    keywords: ["penetration", "testing", "vulnerability", "burp", "metasploit"]
+                }
+            ],
+            cloud: [
+                {
+                    title: "Cloud Architecture Design",
+                    content: "Designs scalable, resilient cloud architectures using microservices, containerization, and serverless computing. Expert in AWS services including EC2, Lambda, RDS, and infrastructure as code with Terraform.",
+                    keywords: ["architecture", "microservices", "containers", "serverless", "aws", "terraform"]
+                },
+                {
+                    title: "DevOps Pipeline Implementation",
+                    content: "Builds comprehensive CI/CD pipelines using Jenkins, GitLab CI, and GitHub Actions. Implements automated testing, deployment strategies, and monitoring solutions for cloud-native applications.",
+                    keywords: ["devops", "cicd", "jenkins", "gitlab", "automation", "monitoring"]
+                },
+                {
+                    title: "Kubernetes and Container Orchestration",
+                    content: "Expert in Kubernetes deployment, management, and optimization. Designs container orchestration strategies for high-availability applications and implements service mesh architectures.",
+                    keywords: ["kubernetes", "containers", "orchestration", "docker", "service-mesh"]
+                }
+            ],
+            devops: [
+                {
+                    title: "Infrastructure as Code",
+                    content: "Specializes in IaC using Terraform, CloudFormation, and Ansible. Creates reusable infrastructure templates and implements GitOps workflows for infrastructure management.",
+                    keywords: ["iac", "terraform", "cloudformation", "ansible", "gitops"]
+                },
+                {
+                    title: "Monitoring and Observability",
+                    content: "Implements comprehensive monitoring solutions using Prometheus, Grafana, and ELK stack. Designs alerting strategies and creates dashboards for system health and performance metrics.",
+                    keywords: ["monitoring", "observability", "prometheus", "grafana", "elk", "metrics"]
+                },
+                {
+                    title: "Automation Scripting",
+                    content: "Proficient in Python, Bash, and PowerShell for automation tasks. Creates custom scripts for deployment, monitoring, and maintenance of complex infrastructure.",
+                    keywords: ["automation", "python", "bash", "powershell", "scripting"]
+                }
+            ],
+            ai: [
+                {
+                    title: "Machine Learning Engineering",
+                    content: "Builds and deploys machine learning models using TensorFlow, PyTorch, and scikit-learn. Expert in model optimization, deployment pipelines, and MLOps practices for production ML systems.",
+                    keywords: ["machine learning", "tensorflow", "pytorch", "mlops", "deployment"]
+                },
+                {
+                    title: "Natural Language Processing",
+                    content: "Develops NLP solutions using transformers, BERT, and GPT models. Implements text classification, sentiment analysis, and custom language models for business applications.",
+                    keywords: ["nlp", "transformers", "bert", "gpt", "text", "classification"]
+                },
+                {
+                    title: "AI System Architecture",
+                    content: "Designs scalable AI systems with focus on performance, reliability, and cost optimization. Expert in distributed computing, model serving, and AI infrastructure management.",
+                    keywords: ["ai architecture", "distributed", "serving", "infrastructure", "optimization"]
+                }
+            ]
+        };
+
+        // Document Retrieval Function
+        function retrieveRelevantDocs(userQuery) {
+            const query = userQuery.toLowerCase();
+            const relevantDocs = [];
+            
+            // Search through all categories
+            Object.values(knowledgeBase).forEach(category => {
+                category.forEach(doc => {
+                    let relevanceScore = 0;
+                    
+                    // Calculate relevance based on keyword matches
+                    doc.keywords.forEach(keyword => {
+                        if (query.includes(keyword.toLowerCase())) {
+                            relevanceScore += 2;
+                        }
+                    });
+                    
+                    // Check content matches
+                    doc.content.toLowerCase().split(' ').forEach(word => {
+                        if (query.includes(word) && word.length > 3) {
+                            relevanceScore += 1;
+                        }
+                    });
+                    
+                    if (relevanceScore > 0) {
+                        relevantDocs.push({
+                            ...doc,
+                            relevanceScore
+                        });
+                    }
+                });
+            });
+            
+            // Sort by relevance and return top 2-3 documents
+            return relevantDocs
+                .sort((a, b) => b.relevanceScore - a.relevanceScore)
+                .slice(0, 3);
+        }
+
+        // Connect to Groq LLM using OpenAI client approach
+        async function getLLMResponse(userMessage) {
+            try {
+                // Check if OpenAI library is loaded
+                if (typeof OpenAI === 'undefined') {
+                    console.error('OpenAI library not loaded');
+                    return "I'm experiencing technical difficulties with the AI library, but I'm here to help with your technology questions! As Josh Sylvia's AI assistant, I bring expertise in cybersecurity, cloud architecture, and AI development to solve your technical challenges.";
+                }
+
+                // RAG: Retrieve relevant documents
+                const relevantDocs = retrieveRelevantDocs(userMessage);
+                console.log('Retrieved documents:', relevantDocs.length, 'relevant docs found');
+                
+                // Build context-aware system prompt
+                let contextInfo = '';
+                if (relevantDocs.length > 0) {
+                    contextInfo = '\n\nRELEVANT EXPERTISE CONTEXT:\n';
+                    relevantDocs.forEach((doc, index) => {
+                        contextInfo += `\n${index + 1}. ${doc.title}: ${doc.content}\n`;
+                    });
+                    contextInfo += '\nUse this context to provide specific, detailed responses about Josh Sylvia\'s expertise.';
+                }
+
+                console.log('Creating OpenAI client...');
+                const client = new OpenAI({
+                    apiKey: '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',
+                    baseURL: 'https://api.groq.com/openai/v1',
+                    dangerouslyAllowBrowser: true // Required for client-side usage
+                });
+
+                console.log('Making request to Groq with OpenAI client...');
+                
+                const response = await client.chat.completions.create({
+                    model: 'llama-3.1-8b-instant',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: `You are Josh Sylvia, an expert AI assistant specializing in cybersecurity, cloud architecture, DevOps automation, and AI development. You have extensive experience in machine learning, natural language processing, and building intelligent systems that solve complex technical problems.${contextInfo}
+
+Provide helpful, accurate responses about technology questions, emphasizing your expertise in these areas. When relevant, reference specific projects, technologies, or methodologies from your experience. Be detailed and practical in your responses.`
+                        },
+                        {
+                            role: 'user',
+                            content: userMessage
+                        }
+                    ],
+                    max_tokens: 1000,
+                    temperature: 0.7
+                });
+
+                console.log('Groq response received:', response);
+                console.log('Usage info:', response.usage || 'No usage data returned');
+                
+                const aiResponse = response.choices[0]?.message?.content || "I'm here to help with your technology questions! As Josh Sylvia's AI assistant, I bring expertise in cybersecurity, cloud architecture, and AI development to solve your technical challenges.";
+                
+                console.log('AI response content:', aiResponse);
+                return aiResponse;
+            } catch (error) {
+                console.error('Groq API error:', error);
+                console.error('Error details:', error.message);
+                return "I'm experiencing technical difficulties, but I'm here to help with your questions about Josh's tech expertise!";
+            }
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            console.log('Sending message:', input.value);
+            if (input.value.trim() === '') return;
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.style.cssText = 'margin-bottom: 15px; padding: 12px; background: #4A90E2; border-radius: 10px; color: #ffffff;';
+            userMessage.innerHTML = `<strong>You:</strong> ${input.value}`;
+            messages.appendChild(userMessage);
+            
+            // Get AI response from LLM
+            setTimeout(async () => {
+                // Show thinking indicator
+                const aiMessage = document.createElement('div');
+                aiMessage.style.cssText = 'margin-bottom: 15px; padding: 12px; background: #87CEEB; border-radius: 10px; color: #ffffff;';
+                aiMessage.innerHTML = '<strong>AI Assistant:</strong> <em>(thinking...)</em>';
+                messages.appendChild(aiMessage);
+                messages.scrollTop = messages.scrollHeight;
+                
+                console.log('Waiting for LLM response...');
+                const llmResponse = await getLLMResponse(input.value);
+                console.log('LLM response received:', llmResponse);
+                
+                // Update with actual response
+                setTimeout(() => {
+                    aiMessage.innerHTML = `<strong>AI Assistant:</strong> ${llmResponse}`;
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1500); // Show thinking for 1.5 seconds
+            }, 1000);
+            
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+
+    <!-- Docker Information Section -->
+    <section class="mcp-section">
+        <div class="mcp-container">
+            <div class="docker-info">
+                <h3 class="docker-title">Docker Container Configuration</h3>
+                <div class="docker-description">
+                    <strong>Container:</strong> josh-sylvia-ai-mcp<br>
+                    <strong>Image:</strong> joshsilvatech/ai-assistant:latest<br>
+                    <strong>Port:</strong> 8080<br>
+                    <strong>Environment:</strong> Production<br>
+                    <strong>MCP Protocol:</strong> v1.0<br>
+                    <strong>Status:</strong> <span style="color: #28a745;">● Running</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load shared navigation component
+        async function loadNavigation() {
+            try {
+                const response = await fetch('components/navigation.html');
+                const navigationHTML = await response.text();
+                document.getElementById('navigation-container').innerHTML = navigationHTML;
+                
+                // Set active page based on current URL
+                setActiveNavigation();
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+            }
+        }
+        
+        // Initialize OpenAI library when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('OpenAI library loading...');
+            if (typeof OpenAI !== 'undefined') {
+                console.log('OpenAI library loaded successfully');
+            } else {
+                console.error('OpenAI library not loaded - waiting for library...');
+                // Retry after delay
+                setTimeout(() => {
+                    if (typeof OpenAI !== 'undefined') {
+                        console.log('OpenAI library loaded after retry');
+                    } else {
+                        console.error('OpenAI library still not available');
+                    }
+                }, 2000);
+            }
+        });
+
+        // Set active navigation link based on current page
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            // Remove active classes
+            navLinks.forEach(link => link.classList.remove('active'));
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to current page links
+            if (currentPage === 'ai.html' || currentPage === '') {
+                document.querySelector('.nav-link[href="ai.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="ai.html"]')?.classList.add('active');
+            } else if (currentPage === 'about.html') {
+                document.querySelector('.nav-link[href="about.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="about.html"]')?.classList.add('active');
+            } else if (currentPage === 'tutorials.html') {
+                document.querySelector('.nav-link[href="tutorials.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="tutorials.html"]')?.classList.add('active');
+            } else if (currentPage === 'contact.html') {
+                document.querySelector('.nav-link[href="contact.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="contact.html"]')?.classList.add('active');
+            }
+        }
+        
+        // Add toggleSidebar function for mobile menu
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const navToggle = document.querySelector('.nav-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                sidebar && 
+                !sidebar.contains(event.target) && 
+                !navToggle.contains(event.target) && 
+                sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Load navigation when page loads
+        document.addEventListener('DOMContentLoaded', loadNavigation);
+    </script>
+</body>
+</html>
