@@ -722,8 +722,19 @@
                 }
 
                 console.log('Creating OpenAI client...');
+                
+                // Check for API key in environment variables or prompt user
+                const apiKey = process.env.GROQ_API_KEY || 
+                               prompt('Please enter your Groq API key:', '') ||
+                               'demo-key';
+                
+                if (!apiKey || apiKey === 'demo-key') {
+                    console.log('No valid API key provided, using demo mode');
+                    return "I'm currently in demo mode. To use the full AI capabilities, please configure your Groq API key. As Josh Sylvia's AI assistant, I bring expertise in cybersecurity, cloud architecture, and AI development to solve your technical challenges.";
+                }
+                
                 const client = new OpenAI({
-                    apiKey: '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',
+                    apiKey: apiKey,
                     baseURL: 'https://api.groq.com/openai/v1',
                     dangerouslyAllowBrowser: true // Required for client-side usage
                 });
