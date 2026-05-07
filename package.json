@@ -1,6 +1,9 @@
 {
     "name": "starter-node-angular",
     "main": "server.js",
+    "engines": {
+        "node": "18.x"
+    },
     "scripts": {
         "start": "node server.js",
         "install": "npm install",
