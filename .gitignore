@@ -124,11 +124,6 @@ dist
 *.der
 *.csr
 *.crl
-*.pem
-*.p10
-*.p12
-*.p7b
-*.p7c
 *.p7s
 *.p7m
 *.p7r
