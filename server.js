@@ -1,12 +1,11 @@
 // modules =================================================
 var express         = require('express');
 var app             = express();
-var debug           = require('debug');
-var http            = require('http');
-const db            = require('./config/database');
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
-var busboy          = require('connect-busboy');
+var compression     = require('compression');
+var http            = require('http');
+require('dotenv').config();
 
 // configuration ===========================================
 
@@ -16,92 +15,31 @@ var port = process.env.PORT || 8080; // set our port
 
 
 
-app.use(busboy());
+// Enable gzip compression
+app.use(compression());
+
+// Parse request bodies
 app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
-app.use(express.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
+
+// Override HTTP methods
 app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
-app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
+
+// Serve static files with caching headers
+app.use(express.static(__dirname + '/public', {
+    maxAge: '1d', // Cache for 1 day
+    etag: true,
+    lastModified: true
+}));
 
 // routes ==================================================
-	// server routes ===========================================================
-	// handle things like api calls
-	// authentication routes
-//app.use('/api', require('./app/ApiController'));
-
-// Test database endpoint
-app.get('/api/test-db', async (req, res) => {
-  try {
-    const result = await db.query('SELECT NOW()');
-    res.json({ 
-      success: true, 
-      message: 'Database connected successfully',
-      timestamp: result.rows[0].now
-    });
-  } catch (err) {
-    console.error('Database test error:', err);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Database connection failed',
-      error: err.message 
-    });
-  }
-});
-
-// Video API endpoints
-const Video = require('./models/Video');
-
-// Get all videos
-app.get('/api/videos', async (req, res) => {
-  try {
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
-    const videos = await Video.findAll(limit, offset);
-    res.json({ success: true, data: videos });
-  } catch (err) {
-    console.error('Get videos error:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// Get featured video
-app.get('/api/videos/featured', async (req, res) => {
-  try {
-    const video = await Video.findFeatured();
-    if (!video) {
-      return res.json({ success: true, data: null });
-    }
-    res.json({ success: true, data: video });
-  } catch (err) {
-    console.error('Get featured video error:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// Get video by ID
-app.get('/api/videos/:id', async (req, res) => {
-  try {
-    const video = await Video.findById(req.params.id);
-    if (!video) {
-      return res.status(404).json({ success: false, error: 'Video not found' });
-    }
-    res.json({ success: true, data: video });
-  } catch (err) {
-    console.error('Get video error:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// Create new video
-app.post('/api/videos', async (req, res) => {
-  try {
-    const videoData = req.body;
-    const video = await Video.create(videoData);
-    res.status(201).json({ success: true, data: video });
-  } catch (err) {
-    console.error('Create video error:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
+	// Basic API routes for AI functionality
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'AI Chatbot Server is running',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Contact form endpoint
@@ -154,11 +92,6 @@ app.use(function(req, res) {
  */
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
-/**
- * Listen on provided port, on all network interfaces.
- */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -196,15 +129,7 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('AI Chatbot Server listening on ' + bind);
 }
 
-var publicMessageSocket = require('./app/socket/PublicMessageSocket');
-
-
-io.on('connection', function(socket) {
-   console.log("websocket connection build");
-   publicMessageSocket.publicMessage(socket);
-});
-
-exports = module.exports = app; 						// expose app
+exports = module.exports = app;						// expose app

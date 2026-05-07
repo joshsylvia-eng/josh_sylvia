@@ -703,13 +703,11 @@
             try {
                 // Check if OpenAI library is loaded
                 if (typeof OpenAI === 'undefined') {
-                    console.error('OpenAI library not loaded');
                     return "I'm experiencing technical difficulties with the AI library, but I'm here to help with your technology questions! As Josh Sylvia's AI assistant, I bring expertise in cybersecurity, cloud architecture, and AI development to solve your technical challenges.";
                 }
 
                 // RAG: Retrieve relevant documents
                 const relevantDocs = retrieveRelevantDocs(userMessage);
-                console.log('Retrieved documents:', relevantDocs.length, 'relevant docs found');
                 
                 // Build context-aware system prompt
                 let contextInfo = '';
@@ -720,8 +718,6 @@
                     });
                     contextInfo += '\nUse this context to provide specific, detailed responses about Josh Sylvia\'s expertise.';
                 }
-
-                console.log('Creating OpenAI client...');
                 
                 // Check for API key in environment variables or prompt user
                 const apiKey = process.env.GROQ_API_KEY || 
@@ -729,18 +725,15 @@
                                'demo-key';
                 
                 if (!apiKey || apiKey === 'demo-key') {
-                    console.log('No valid API key provided, using demo mode');
                     return "I'm currently in demo mode. To use the full AI capabilities, please configure your Groq API key. As Josh Sylvia's AI assistant, I bring expertise in cybersecurity, cloud architecture, and AI development to solve your technical challenges.";
                 }
                 
                 const client = new OpenAI({
                     apiKey: apiKey,
                     baseURL: 'https://api.groq.com/openai/v1',
-                    dangerouslyAllowBrowser: true // Required for client-side usage
+                    dangerouslyAllowBrowser: true
                 });
 
-                console.log('Making request to Groq with OpenAI client...');
-                
                 const response = await client.chat.completions.create({
                     model: 'llama-3.1-8b-instant',
                     messages: [
@@ -759,17 +752,11 @@ Provide helpful, accurate responses about technology questions, emphasizing your
                     temperature: 0.7
                 });
 
-                console.log('Groq response received:', response);
-                console.log('Usage info:', response.usage || 'No usage data returned');
-                
-                const aiResponse = response.choices[0]?.message?.content || "I'm here to help with your technology questions! As Josh Sylvia's AI assistant, I bring expertise in cybersecurity, cloud architecture, and AI development to solve your technical challenges.";
-                
-                console.log('AI response content:', aiResponse);
-                return aiResponse;
+                return response.choices[0].message.content;
+
             } catch (error) {
-                console.error('Groq API error:', error);
-                console.error('Error details:', error.message);
-                return "I'm experiencing technical difficulties, but I'm here to help with your questions about Josh's tech expertise!";
+                console.error('Error calling Groq API:', error);
+                return "I apologize, but I'm experiencing technical difficulties with the AI service. As Josh Sylvia's AI assistant, I can still help with general questions about cybersecurity, cloud architecture, and AI development based on my training. Please try again later for more specific assistance.";
             }
         }
 
