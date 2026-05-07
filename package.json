@@ -1,6 +1,11 @@
 {
     "name": "starter-node-angular",
     "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "install": "npm install",
+        "build": "npm install"
+    },
     "dependencies": {
         "busboy": "^1.6.0",
         "connect-busboy": "^1.0.0",
