@@ -50,22 +50,142 @@ app.get('/api/videos', async (req, res) => {
     const path = require('path');
     const videosDataFile = path.join(__dirname, 'data', 'videos.json');
     
+    let content = [];
+    let videos = [];
+    
     // Read videos from JSON file
     if (fs.existsSync(videosDataFile)) {
       const videosData = fs.readFileSync(videosDataFile, 'utf8');
-      const videos = JSON.parse(videosData);
-      console.log(`Serving ${videos.length} videos from JSON file`);
-      res.json(videos);
-    } else {
-      // Return empty array if file doesn't exist
-      console.log('Videos JSON file not found, returning empty array');
-      res.json([]);
+      videos = JSON.parse(videosData);
+      content = content.concat(videos);
+      console.log(`Loaded ${videos.length} videos from JSON file`);
     }
+    
+    // Add GitHub repositories
+    const githubRepos = [
+      {
+        title: 'Metasploit Framework',
+        description: 'The world\'s most used penetration testing framework. Advanced exploitation framework for security professionals and ethical hackers.',
+        youtube_id: '',
+        location: 'Cybersecurity Tools',
+        tags: ['cybersecurity', 'penetration testing', 'security', 'metasploit'],
+        is_featured: false,
+        type: 'github',
+        category: 'cybersecurity',
+        file_path: 'https://github.com/rapid7/metasploit-framework',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-01-15T00:00:00Z'
+      },
+      {
+        title: 'OSQuery',
+        description: 'SQL powered operating system instrumentation and monitoring. Query your devices like a database for security monitoring and compliance.',
+        youtube_id: '',
+        location: 'Security Monitoring',
+        tags: ['security', 'monitoring', 'siem', 'osquery'],
+        is_featured: false,
+        type: 'github',
+        category: 'cybersecurity',
+        file_path: 'https://github.com/osquery/osquery',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-01-20T00:00:00Z'
+      },
+      {
+        title: 'Security Tools for Developers',
+        description: 'Comprehensive collection of security tools and resources for developers. Essential security utilities for modern software development.',
+        youtube_id: '',
+        location: 'Developer Security',
+        tags: ['security', 'development', 'tools', 'devsecops'],
+        is_featured: false,
+        type: 'github',
+        category: 'cybersecurity',
+        file_path: 'https://github.com/erev0s/Security-Tools-for-Developers',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-01-25T00:00:00Z'
+      },
+      {
+        title: 'Terraform Provider AWS',
+        description: 'Official Terraform AWS provider for infrastructure as code. Manage AWS resources with declarative configuration files.',
+        youtube_id: '',
+        location: 'Cloud Infrastructure',
+        tags: ['aws', 'terraform', 'infrastructure', 'devops'],
+        is_featured: false,
+        type: 'github',
+        category: 'cloud-devops',
+        file_path: 'https://github.com/hashicorp/terraform-provider-aws',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-02-01T00:00:00Z'
+      },
+      {
+        title: 'Kubernetes',
+        description: 'Production-grade container orchestration platform. Automate deployment, scaling, and management of containerized applications.',
+        youtube_id: '',
+        location: 'Container Orchestration',
+        tags: ['kubernetes', 'containers', 'orchestration', 'devops'],
+        is_featured: false,
+        type: 'github',
+        category: 'cloud-devops',
+        file_path: 'https://github.com/kubernetes/kubernetes',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-02-05T00:00:00Z'
+      },
+      {
+        title: 'Next.js',
+        description: 'The React framework for production. Full-stack React framework with server-side rendering, routing, and more.',
+        youtube_id: '',
+        location: 'Frontend Framework',
+        tags: ['react', 'nextjs', 'frontend', 'javascript'],
+        is_featured: false,
+        type: 'github',
+        category: 'fullstack',
+        file_path: 'https://github.com/vercel/next.js',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-02-10T00:00:00Z'
+      },
+      {
+        title: 'Express.js',
+        description: 'Fast, unopinionated web framework for Node.js. Minimal and flexible Node.js web application framework.',
+        youtube_id: '',
+        location: 'Backend Framework',
+        tags: ['nodejs', 'express', 'backend', 'api'],
+        is_featured: false,
+        type: 'github',
+        category: 'fullstack',
+        file_path: 'https://github.com/expressjs/express',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-02-15T00:00:00Z'
+      },
+      {
+        title: 'LangChain',
+        description: 'Building applications with LLMs through composability. Framework for developing applications powered by large language models.',
+        youtube_id: '',
+        location: 'AI & LLM Framework',
+        tags: ['ai', 'llm', 'langchain', 'machine learning'],
+        is_featured: false,
+        type: 'github',
+        category: 'ai-rag',
+        file_path: 'https://github.com/langchain-ai/langchain',
+        file_size: 0,
+        duration: 0,
+        created_at: '2024-02-20T00:00:00Z'
+      }
+    ];
+    
+    content = content.concat(githubRepos);
+    console.log(`Serving ${content.length} total items (${videos.length} videos + ${githubRepos.length} GitHub repos)`);
+    res.json(content);
+    
   } catch (error) {
-    console.error('Error fetching videos:', error);
+    console.error('Error fetching content:', error);
     res.status(500).json({ 
       success: false, 
-      error: 'Failed to fetch videos' 
+      error: 'Failed to fetch content' 
     });
   }
 });

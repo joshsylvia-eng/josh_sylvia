@@ -166,6 +166,15 @@ function openModal(type, title, description, filePath, location, date, tags) {
         };
     } else if (type === 'github') {
         console.log('DEBUG: Creating GitHub modal');
+        // Create webcard container for GitHub repo
+        const webcardContainer = document.createElement('div');
+        webcardContainer.style.cssText = `
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 100%;
+        `;
+        
         // Create iframe for GitHub repository
         const iframe = document.createElement('iframe');
         iframe.src = filePath;
@@ -179,7 +188,8 @@ function openModal(type, title, description, filePath, location, date, tags) {
         
         console.log('DEBUG: GitHub iframe src:', iframe.src);
         
-        modalMedia.appendChild(iframe);
+        webcardContainer.appendChild(iframe);
+        modalMedia.appendChild(webcardContainer);
         
         console.log('DEBUG: GitHub iframe appended to modalMedia');
         
@@ -288,14 +298,15 @@ async function openTab(event, tabName) {
         const videos = await response.json();
         
         // Convert videos to the expected format
-        const content = videos.map(video => ({
-            type: 'video',
-            title: video.title,
-            description: video.description,
-            file_path: video.file_path,
-            location: video.location,
-            tags: video.tags || [],
-            created_at: video.created_at || new Date().toISOString()
+        const content = videos.map(item => ({
+            type: item.type || 'video',
+            title: item.title,
+            description: item.description,
+            file_path: item.file_path,
+            location: item.location,
+            tags: item.tags || [],
+            category: item.category,
+            created_at: item.created_at || new Date().toISOString()
         }));
         
         let filteredContent = content;
@@ -304,6 +315,14 @@ async function openTab(event, tabName) {
             filteredContent = content.filter(item => item.type === 'video');
         } else if (tabName === 'github') {
             filteredContent = content.filter(item => item.type === 'github');
+        } else if (tabName === 'cybersecurity') {
+            filteredContent = content.filter(item => item.category === 'cybersecurity');
+        } else if (tabName === 'cloud-devops') {
+            filteredContent = content.filter(item => item.category === 'cloud-devops');
+        } else if (tabName === 'fullstack') {
+            filteredContent = content.filter(item => item.category === 'fullstack');
+        } else if (tabName === 'ai-rag') {
+            filteredContent = content.filter(item => item.category === 'ai-rag');
         } else if (tabName === 'playground') {
             filteredContent = content.filter(item => item.type === 'playground');
         }
@@ -346,14 +365,15 @@ async function loadContent() {
         console.log('DEBUG: Fetched videos from API:', videos);
         
         // Convert videos to the expected format and show all content by default
-        const content = videos.map(video => ({
-            type: 'video',
-            title: video.title,
-            description: video.description,
-            file_path: video.file_path,
-            location: video.location,
-            tags: video.tags || [],
-            created_at: video.created_at || new Date().toISOString()
+        const content = videos.map(item => ({
+            type: item.type || 'video',
+            title: item.title,
+            description: item.description,
+            file_path: item.file_path,
+            location: item.location,
+            tags: item.tags || [],
+            category: item.category,
+            created_at: item.created_at || new Date().toISOString()
         }));
         
         renderContentGrid(content);
@@ -429,14 +449,18 @@ function renderContentGrid(content) {
             if (tile) {
                 console.log('DEBUG: Tile clicked via event delegation');
                 const dataVideoUrl = tile.getAttribute('data-video-url');
-                const dataTitle = tile.querySelector('.tile-title')?.textContent;
+                const dataTitle = tile.querySelector('.tile-title')?.textContent.trim();
                 const dataDescription = tile.querySelector('.tile-description')?.textContent;
                 const dataLocation = tile.querySelector('.tile-meta span:first-child')?.textContent;
                 const dataDate = tile.querySelector('.tile-meta span:last-child')?.textContent;
                 const dataTags = Array.from(tile.querySelectorAll('.tile-tag')).map(tag => tag.textContent);
                 
+                // Determine if it's a GitHub repo or video
+                const isGitHub = dataVideoUrl && dataVideoUrl.includes('github.com');
+                const itemType = isGitHub ? 'github' : 'video';
+                
                 if (dataVideoUrl && dataTitle && dataDescription && dataLocation && dataDate) {
-                    openModal('video', dataTitle, dataDescription, dataVideoUrl, dataLocation, dataDate, dataTags);
+                    openModal(itemType, dataTitle, dataDescription, dataVideoUrl, dataLocation, dataDate, dataTags);
                 }
             }
         });
@@ -444,27 +468,54 @@ function renderContentGrid(content) {
 }
 
 function createTile(item) {
+    const isGitHub = item.type === 'github';
+    const isVideo = item.type === 'video';
+    
     return `
         <div class="tile" 
              onclick="openModal('${item.type}', '${item.title}', '${item.description}', '${item.file_path}', '${item.location}', '${item.created_at}', ${JSON.stringify(item.tags || [])})"
              data-video-url="${item.file_path}">
             <div class="tile-video">
-                <video src="${item.file_path}" alt="${item.title}" class="video-thumbnail" style="
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    pointer-events: none;
-                "></video>
+                ${isGitHub ? `
+                    <div class="github-thumbnail" style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: linear-gradient(135deg, #24292e 0%, #0366d6 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        pointer-events: none;
+                    ">
+                        <i class="fab fa-github" style="
+                            font-size: 3rem;
+                            color: white;
+                            opacity: 0.9;
+                        "></i>
+                    </div>
+                ` : `
+                    <video src="${item.file_path}" alt="${item.title}" class="video-thumbnail" style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        pointer-events: none;
+                    "></video>
+                `}
             </div>
             <div class="tile-content">
-                <h3 class="tile-title">${item.title}</h3>
+                <h3 class="tile-title">
+                    ${item.title}
+                    ${isGitHub ? '<i class="fab fa-github" style="margin-left: 0.5rem; color: #0366d6;"></i>' : ''}
+                </h3>
                 <p class="tile-description">${item.description}</p>
                 <div class="tile-meta">
                     <span><i class="fas fa-map-marker-alt"></i> ${item.location}</span>
-                    <span><i class="fas fa-calendar"></i> ${item.created_at}</span>
+                    <span><i class="fas fa-calendar"></i> ${new Date(item.created_at).toLocaleDateString()}</span>
                 </div>
                 ${item.tags && item.tags.length > 0 ? `
                     <div class="tile-tags">
