@@ -271,7 +271,7 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Tab functionality
-function openTab(event, tabName) {
+async function openTab(event, tabName) {
     // Remove active class from all tabs
     const tabLinks = document.querySelectorAll('.tab-link');
     tabLinks.forEach(link => link.classList.remove('active'));
@@ -279,35 +279,95 @@ function openTab(event, tabName) {
     // Add active class to clicked tab
     event.currentTarget.classList.add('active');
     
-    // Filter and render content based on selected tab
-    const content = getSampleContent();
-    let filteredContent = content;
-    
-    if (tabName === 'videos') {
-        filteredContent = content.filter(item => item.type === 'video');
-    } else if (tabName === 'github') {
-        filteredContent = content.filter(item => item.type === 'github');
-    } else if (tabName === 'playground') {
-        filteredContent = content.filter(item => item.type === 'playground');
+    try {
+        // Fetch videos from API
+        const response = await fetch('/api/videos');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const videos = await response.json();
+        
+        // Convert videos to the expected format
+        const content = videos.map(video => ({
+            type: 'video',
+            title: video.title,
+            description: video.description,
+            file_path: video.file_path,
+            location: video.location,
+            tags: video.tags || [],
+            created_at: video.created_at || new Date().toISOString()
+        }));
+        
+        let filteredContent = content;
+        
+        if (tabName === 'videos') {
+            filteredContent = content.filter(item => item.type === 'video');
+        } else if (tabName === 'github') {
+            filteredContent = content.filter(item => item.type === 'github');
+        } else if (tabName === 'playground') {
+            filteredContent = content.filter(item => item.type === 'playground');
+        }
+        // 'all' shows everything
+        
+        renderContentGrid(filteredContent);
+        
+        // Add hover video effects after content is rendered
+        setTimeout(() => addVideoHoverEffects(), 100);
+    } catch (error) {
+        console.error('DEBUG: Error fetching videos for tab:', error);
+        // Fallback to sample content if API fails
+        const content = getSampleContent();
+        let filteredContent = content;
+        
+        if (tabName === 'videos') {
+            filteredContent = content.filter(item => item.type === 'video');
+        } else if (tabName === 'github') {
+            filteredContent = content.filter(item => item.type === 'github');
+        } else if (tabName === 'playground') {
+            filteredContent = content.filter(item => item.type === 'playground');
+        }
+        
+        renderContentGrid(filteredContent);
+        setTimeout(() => addVideoHoverEffects(), 100);
     }
-    // 'all' shows everything
-    
-    renderContentGrid(filteredContent);
 }
 
 async function loadContent() {
     console.log('=== DEBUG: loadContent called ===');
     const contentGrid = document.getElementById('content-grid');
     
-    // Always use sample content by default
-    const content = getSampleContent();
-    console.log('DEBUG: Using sample content:', content);
-    
-    // Show all content by default
-    renderContentGrid(content);
-    
-    // Add hover video effects after content is rendered
-    setTimeout(() => addVideoHoverEffects(), 100);
+    try {
+        // Fetch videos from API
+        const response = await fetch('/api/videos');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const videos = await response.json();
+        console.log('DEBUG: Fetched videos from API:', videos);
+        
+        // Convert videos to the expected format and show all content by default
+        const content = videos.map(video => ({
+            type: 'video',
+            title: video.title,
+            description: video.description,
+            file_path: video.file_path,
+            location: video.location,
+            tags: video.tags || [],
+            created_at: video.created_at || new Date().toISOString()
+        }));
+        
+        renderContentGrid(content);
+        
+        // Add hover video effects after content is rendered
+        setTimeout(() => addVideoHoverEffects(), 100);
+    } catch (error) {
+        console.error('DEBUG: Error fetching videos from API:', error);
+        // Fallback to sample content if API fails
+        const content = getSampleContent();
+        console.log('DEBUG: Using fallback sample content:', content);
+        renderContentGrid(content);
+        setTimeout(() => addVideoHoverEffects(), 100);
+    }
 }
 
 function getSampleContent() {

@@ -48,15 +48,17 @@ app.get('/api/videos', async (req, res) => {
   try {
     const fs = require('fs');
     const path = require('path');
-    const videosDataFile = path.join(__dirname, 'public', 'data', 'videos.json');
+    const videosDataFile = path.join(__dirname, 'data', 'videos.json');
     
     // Read videos from JSON file
     if (fs.existsSync(videosDataFile)) {
       const videosData = fs.readFileSync(videosDataFile, 'utf8');
       const videos = JSON.parse(videosData);
+      console.log(`Serving ${videos.length} videos from JSON file`);
       res.json(videos);
     } else {
       // Return empty array if file doesn't exist
+      console.log('Videos JSON file not found, returning empty array');
       res.json([]);
     }
   } catch (error) {
