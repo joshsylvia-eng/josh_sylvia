@@ -343,6 +343,16 @@
                 border: 1px solid #f5c6cb;
             }
 
+            .debug-info {
+                background: #f0f0f0;
+                border-left: 4px solid #007bff;
+                padding: 10px;
+                margin-top: 10px;
+                font-size: 12px;
+                border-radius: 4px;
+                color: #333;
+            }
+
             @media (max-width: 768px) {
                 .nav-menu {
                     display: none;
@@ -411,6 +421,16 @@
                         <div id="form-message"></div>
                         <form id="contact-form">
                             <div class="form-group">
+                                <label for="name" class="form-label">Name *</label>
+                                <input type="text" id="name" name="name" class="form-input" required placeholder="Enter your name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" id="email" name="email" class="form-input" required placeholder="Enter your email">
+                            </div>
+                            
+                            <div class="form-group">
                                 <label for="subject" class="form-label">Subject *</label>
                                 <input type="text" id="subject" name="subject" class="form-input" required placeholder="Enter subject">
                             </div>
@@ -426,11 +446,6 @@
                     
                     <div class="contact-info-section">
                         <h2 class="section-title">Contact Information</h2>
-                        
-                        <div class="contact-info-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>Email: Protected</span>
-                        </div>
                         
                         <div class="contact-info-item">
                             <i class="fas fa-map-marker-alt"></i>
@@ -518,21 +533,35 @@
                 
                 const submitBtn = document.querySelector('.submit-btn');
                 const messageDiv = document.getElementById('form-message');
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
                 const subject = document.getElementById('subject').value.trim();
                 const message = document.getElementById('message').value.trim();
                 
+                // Debug logging
+                console.log('=== CONTACT FORM DEBUG ===');
+                console.log('Name:', name);
+                console.log('Email:', email);
+                console.log('Subject:', subject);
+                console.log('Message:', message);
+                console.log('Message length:', message.length);
+                console.log('Subject length:', subject.length);
+                
                 // Client-side validation
-                if (!subject || !message) {
-                    messageDiv.innerHTML = '<div class="error-message">Please fill in both subject and message fields.</div>';
+                if (!name || !email || !subject || !message) {
+                    console.error('Validation failed: Missing required fields');
+                    messageDiv.innerHTML = '<div class="error-message">Please fill in all required fields (Name, Email, Subject, Message).</div>';
                     return;
                 }
                 
                 if (subject.length < 3) {
+                    console.error('Validation failed: Subject too short');
                     messageDiv.innerHTML = '<div class="error-message">Subject must be at least 3 characters long.</div>';
                     return;
                 }
                 
                 if (message.length < 10) {
+                    console.error('Validation failed: Message too short');
                     messageDiv.innerHTML = '<div class="error-message">Message must be at least 10 characters long.</div>';
                     return;
                 }
@@ -542,32 +571,48 @@
                 submitBtn.textContent = 'Sending...';
                 
                 try {
+                    console.log('Sending request to /api/contact');
                     const response = await fetch('/api/contact', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
+                            name: name,
+                            email: email,
                             subject: subject,
                             message: message
                         })
                     });
                     
+                    console.log('Response status:', response.status);
                     const result = await response.json();
+                    console.log('API response:', result);
                     
                     if (result.success) {
+                        console.log('Message sent successfully');
                         messageDiv.innerHTML = '<div class="success-message">Message sent successfully! We\'ll get back to you within 24 hours.</div>';
                         document.getElementById('contact-form').reset();
+                        
+                        // Add debugging info for email delivery
+                        setTimeout(() => {
+                            messageDiv.innerHTML += '<div class="debug-info" style="margin-top: 10px; padding: 10px; background: #f0f0f0; border-left: 4px solid #007bff; font-size: 12px;"><strong>Debug Info:</strong> If you don\'t receive a response within 24 hours, please check: 1) Your spam/junk folders, 2) The email address you entered, 3) Email server delays. You can also try sending directly to joshsylvia@yahoo.com</div>';
+                        }, 2000);
                     } else {
+                        console.error('Message send failed:', result);
                         messageDiv.innerHTML = '<div class="error-message">Failed to send message. Please try again later.</div>';
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Network or server error:', error);
                     messageDiv.innerHTML = '<div class="error-message">An error occurred. Please try again later.</div>';
+                    
+                    // Add debugging info for network errors
+                    messageDiv.innerHTML += '<div class="debug-info" style="margin-top: 10px; padding: 10px; background: #f0f0f0; border-left: 4px solid #dc3545; font-size: 12px;"><strong>Debug Info:</strong> Network error detected. Please check your internet connection and try again. Error details: ' + error.message + '</div>';
                 } finally {
                     // Re-enable submit button
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Send Message';
+                    console.log('Form reset completed');
                 }
             });
         </script>

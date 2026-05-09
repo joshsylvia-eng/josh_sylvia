@@ -193,34 +193,164 @@ app.get('/api/videos', async (req, res) => {
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
   try {
-    const { subject, message } = req.body;
+    const { name, email, subject, message } = req.body;
     
     // Validate input
-    if (!subject || !message) {
+    if (!name || !email || !subject || !message) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Subject and message are required' 
+        error: 'Name, Email, Subject, and Message are required' 
       });
     }
 
     // Get email from environment variables
     const recipientEmail = process.env.CONTACT_EMAIL || 'joshsylvia@yahoo.com';
     
-    // For now, we'll just log the message (in a real app, you'd use nodemailer or similar)
     console.log('Contact Form Submission:');
+    console.log('Name:', name);
+    console.log('Email:', email);
     console.log('To:', recipientEmail);
     console.log('Subject:', subject);
     console.log('Message:', message);
     console.log('Timestamp:', new Date().toISOString());
     
-    // In a production environment, you would send an actual email here
-    // For demonstration, we'll just return success
+    // Import Mailtrap for development email testing
+    const { MailtrapClient } = require('mailtrap');
     
-    res.json({ 
-      success: true, 
-      message: 'Message received successfully' 
-    });
+    // Create Mailtrap client
+    let client;
     
+    // Check for Mailtrap credentials
+    console.log('=== ENVIRONMENT DEBUG ===');
+    console.log('MAILTRAP_TOKEN:', process.env.MAILTRAP_TOKEN);
+    console.log('MAILTRAP_INBOX:', process.env.MAILTRAP_INBOX);
+    console.log('CONTACT_EMAIL:', process.env.CONTACT_EMAIL);
+    console.log('EMAIL_USER:', process.env.EMAIL_USER);
+    
+    const TOKEN = process.env.MAILTRAP_TOKEN || '607ef5e8b5da9a30591e536ee4d19573';
+    
+    if (!TOKEN || TOKEN === 'your-mailtrap-token') {
+      console.log('Mailtrap token not configured in .env file');
+      console.log('Email sending disabled - using development mode');
+      client = null;
+    } else {
+      try {
+        client = new MailtrapClient({
+          token: TOKEN,
+        });
+        console.log('Mailtrap client configured successfully');
+      } catch (error) {
+        console.error('Failed to create Mailtrap client:', error);
+        client = null;
+        console.log('Email sending disabled - using development mode');
+      }
+    }
+    
+    // Email options
+    const mailOptions = {
+      from: process.env.EMAIL_USER || 'your-email@yahoo.com',
+      to: recipientEmail,
+      subject: subject,
+      text: message,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+            <h2 style="color: #333; margin-bottom: 10px;">New Contact Form Submission</h2>
+            <p style="color: #666; line-height: 1.5;"><strong>Name:</strong> ${name}</p>
+            <p style="color: #666; line-height: 1.5;"><strong>Email:</strong> ${email}</p>
+            <p style="color: #666; line-height: 1.5;"><strong>Subject:</strong> ${subject}</p>
+            <p style="color: #666; line-height: 1.5;"><strong>Message:</strong></p>
+            <div style="background: #fff; padding: 15px; border-radius: 4px; margin-top: 10px;">
+              ${message}
+            </div>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+            <p style="color: #999; font-size: 12px;">Sent from: ${req.ip || 'Unknown IP'}</p>
+            <p style="color: #999; font-size: 12px;">Date: ${new Date().toLocaleString()}</p>
+          </div>
+        </div>
+      `
+    };
+    
+    // Send email using Mailtrap
+    if (client) {
+      try {
+        console.log('Attempting to send email via Mailtrap...');
+        
+        const sender = {
+          email: email || 'noreply@joshylvia.com',
+          name: name || 'Contact Form',
+        };
+        
+        const recipients = [
+          {
+            email: recipientEmail,
+          }
+        ];
+        
+        const mailOptions = {
+          from: sender,
+          to: recipients,
+          subject: subject,
+          text: message,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <h2 style="color: #333; margin-bottom: 10px;">New Contact Form Submission</h2>
+                <p style="color: #666; line-height: 1.5;"><strong>Name:</strong> ${name}</p>
+                <p style="color: #666; line-height: 1.5;"><strong>Email:</strong> ${email}</p>
+                <p style="color: #666; line-height: 1.5;"><strong>Subject:</strong> ${subject}</p>
+                <p style="color: #666; line-height: 1.5;"><strong>Message:</strong></p>
+                <div style="background: #fff; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                  ${message}
+                </div>
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                <p style="color: #999; font-size: 12px;">Sent from: ${req.ip || 'Unknown IP'}</p>
+                <p style="color: #999; font-size: 12px;">Date: ${new Date().toLocaleString()}</p>
+              </div>
+            </div>
+          `
+        };
+        
+        const response = await client.send(mailOptions);
+        console.log('Mailtrap response:', response);
+        
+        res.json({ 
+          success: true, 
+          message: 'Message received successfully. Email sent to ' + recipientEmail 
+        });
+        
+      } catch (error) {
+        console.error('Mailtrap error:', error);
+        
+        // Provide specific error handling for Mailtrap issues
+        let errorMessage = 'Failed to send email: ' + error.message;
+        if (error.response) {
+          errorMessage = 'Mailtrap API error: ' + error.response.data.errors[0].message;
+        } else if (error.code === 'ECONNREFUSED') {
+          errorMessage = 'Connection to Mailtrap failed. Please check your API token.';
+        } else {
+          errorMessage = 'Email service temporarily unavailable. Please try again later.';
+        }
+        
+        res.status(500).json({ 
+          success: false, 
+          error: errorMessage
+        });
+      }
+    } else {
+      // Development mode - just log and return success
+      console.log('Development mode - logging email submission only');
+      console.log('Contact Form Submission:');
+      console.log('To:', recipientEmail);
+      console.log('Subject:', subject);
+      console.log('Message:', message);
+      console.log('Timestamp:', new Date().toISOString());
+      
+      res.json({ 
+        success: true, 
+        message: 'Message received successfully (development mode)' 
+      });
+    }
   } catch (error) {
     console.error('Contact form error:', error);
     res.status(500).json({ 

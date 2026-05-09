@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIs - REST, GraphQL, Microservices & Testing</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/apis.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navigation-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="apis-hero">
+        <div class="apis-hero-content">
+            <h1>APIs & Microservices</h1>
+            <p>Comprehensive guide to REST, GraphQL, microservices architecture and API testing</p>
+            <div class="apis-hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-plug"></i>
+                    <span>REST APIs</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>GraphQL</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-cubes"></i>
+                    <span>Microservices</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-vial"></i>
+                    <span>API Testing</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="apis-main">
+        <div class="apis-container">
+            
+            <!-- REST API Section -->
+            <section class="apis-section" id="rest-api">
+                <div class="section-header">
+                    <i class="fas fa-plug section-icon"></i>
+                    <h2>REST APIs</h2>
+                    <p>Representational State Transfer - The foundation of modern web APIs</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>REST Principles</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-server"></i> Client-Server Architecture</li>
+                            <li><i class="fas fa-check-circle"></i> Stateless Communication</li>
+                            <li><i class="fas fa-save"></i> Cacheable Responses</li>
+                            <li><i class="fas fa-layer-group"></i> Layered System</li>
+                            <li><i class="fas fa-code"></i> Code on Demand (optional)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>HTTP Methods</h3>
+                        <div class="method-grid">
+                            <div class="method-item get">
+                                <span class="method">GET</span>
+                                <span class="description">Retrieve resources</span>
+                            </div>
+                            <div class="method-item post">
+                                <span class="method">POST</span>
+                                <span class="description">Create resources</span>
+                            </div>
+                            <div class="method-item put">
+                                <span class="method">PUT</span>
+                                <span class="description">Update resources</span>
+                            </div>
+                            <div class="method-item patch">
+                                <span class="method">PATCH</span>
+                                <span class="description">Partial updates</span>
+                            </div>
+                            <div class="method-item delete">
+                                <span class="method">DELETE</span>
+                                <span class="description">Remove resources</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>REST API Example</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">// Express.js REST API
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+// GET /api/users
+app.get('/api/users', async (req, res) => {
+    const users = await User.find();
+    res.json(users);
+});
+
+// POST /api/users
+app.post('/api/users', async (req, res) => {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).json(user);
+});
+
+app.listen(3000);</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Best Practices</h3>
+                        <div class="practice-item">
+                            <h4>Use Proper HTTP Status Codes</h4>
+                            <p>200 OK, 201 Created, 400 Bad Request, 404 Not Found, 500 Internal Server Error</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Version Your APIs</h4>
+                            <p>Use URL versioning (/api/v1/users) or header versioning</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Consistent Response Format</h4>
+                            <p>Standardize JSON responses with metadata</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GraphQL Section -->
+            <section class="apis-section" id="graphql">
+                <div class="section-header">
+                    <i class="fas fa-project-diagram section-icon"></i>
+                    <h2>GraphQL</h2>
+                    <p>Query language for APIs - Flexible and efficient data fetching</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>GraphQL vs REST</h3>
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Aspect</th>
+                                        <th>GraphQL</th>
+                                        <th>REST</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Data Fetching</td>
+                                        <td>✅ Single endpoint</td>
+                                        <td>❌ Multiple endpoints</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Over-fetching</td>
+                                        <td>✅ Prevents</td>
+                                        <td>❌ Common issue</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Under-fetching</td>
+                                        <td>✅ Prevents</td>
+                                        <td>❌ Multiple requests</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Type System</td>
+                                        <td>✅ Strongly typed</td>
+                                        <td>⚠️ Optional</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>GraphQL Schema</h3>
+                        <div class="code-block">
+                            <pre><code class="language-graphql">type User {
+    id: ID!
+    name: String!
+    email: String!
+    posts: [Post!]!
+}
+
+type Post {
+    id: ID!
+    title: String!
+    content: String!
+    author: User!
+}
+
+type Query {
+    users: [User!]!
+    user(id: ID!): User
+    posts: [Post!]!
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!): User!
+    createPost(input: CreatePostInput!): Post!
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>GraphQL Queries</h3>
+                        <div class="code-block">
+                            <pre><code class="language-graphql"># Query for user with their posts
+query GetUserWithPosts($userId: ID!) {
+    user(id: $userId) {
+        id
+        name
+        email
+        posts {
+            id
+            title
+            content
+        }
+    }
+}
+
+# Mutation to create a user
+mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+        id
+        name
+        email
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>GraphQL Server Setup</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">const { ApolloServer, gql } = require('apollo-server');
+
+const typeDefs = gql`
+    type User {
+        id: ID!
+        name: String!
+        email: String!
+    }
+    
+    type Query {
+        users: [User!]!
+        user(id: ID!): User
+    }
+`;
+
+const resolvers = {
+    Query: {
+        users: () => users,
+        user: (_, { id }) => users.find(u => u.id === id)
+    }
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
+server.listen().then(({ url }) => {
+    console.log(`Server ready at ${url}`);
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Microservices Section -->
+            <section class="apis-section" id="microservices">
+                <div class="section-header">
+                    <i class="fas fa-cubes section-icon"></i>
+                    <h2>Microservices Architecture</h2>
+                    <p>Building scalable, maintainable systems with distributed services</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Microservices Principles</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-cube"></i> Single Responsibility</li>
+                            <li><i class="fas fa-expand-arrows-alt"></i> Bounded Context</li>
+                            <li><i class="fas fa-database"></i> Own Data</li>
+                            <li><i class="fas fa-code-branch"></i> Independent Deployment</li>
+                            <li><i class="fas fa-heartbeat"></i> Health Monitoring</li>
+                            <li><i class="fas fa-shield-alt"></i> Failure Isolation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Communication Patterns</h3>
+                        <div class="communication-patterns">
+                            <div class="pattern-item">
+                                <h4><i class="fas fa-exchange-alt"></i> Synchronous</h4>
+                                <p>REST APIs, gRPC, GraphQL</p>
+                            </div>
+                            <div class="pattern-item">
+                                <h4><i class="fas fa-envelope"></i> Asynchronous</h4>
+                                <p>Message Queues, Event Streaming</p>
+                            </div>
+                            <div class="pattern-item">
+                                <h4><i class="fas fa-broadcast-tower"></i> Events</h4>
+                                <p>Pub/Sub, Event Sourcing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Service Discovery</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">// Consul Service Discovery
+const consul = require('consul')();
+
+// Register service
+consul.agent.service.register({
+    name: 'user-service',
+    id: 'user-service-1',
+    address: '192.168.1.100',
+    port: 3001,
+    check: {
+        http: 'http://192.168.1.100:3001/health',
+        interval: '10s'
+    }
+}, (err) => {
+    if (err) throw err;
+    console.log('Service registered');
+});
+
+// Discover services
+consul.health.service('user-service', (err, result) => {
+    if (err) throw err;
+    console.log('Available services:', result);
+});</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>API Gateway Pattern</h3>
+                        <div class="practice-item">
+                            <h4>Single Entry Point</h4>
+                            <p>Consolidate multiple microservices behind one API</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Request Routing</h4>
+                            <p>Route requests to appropriate services</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Cross-cutting Concerns</h4>
+                            <p>Authentication, rate limiting, logging</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Testing Section -->
+            <section class="apis-section" id="api-testing">
+                <div class="section-header">
+                    <i class="fas fa-vial section-icon"></i>
+                    <h2>API Testing</h2>
+                    <p>Comprehensive testing strategies for APIs and microservices</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Testing Types</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-cube"></i> Unit Tests - Individual endpoints</li>
+                            <li><i class="fas fa-project-diagram"></i> Integration Tests - Service interactions</li>
+                            <li><i class="fas fa-globe"></i> End-to-End Tests - Full workflows</li>
+                            <li><i class="fas fa-tachometer-alt"></i> Performance Tests - Load and stress</li>
+                            <li><i class="fas fa-shield-alt"></i> Security Tests - Vulnerabilities</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Postman/Newman Testing</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">// Postman Collection Test
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Response has user data", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property('id');
+    pm.expect(jsonData).to.have.property('name');
+});
+
+// Environment variables
+pm.environment.set("userId", jsonData.id);
+
+// Chaining requests
+pm.test("User created successfully", function () {
+    pm.environment.set("newUserId", jsonData.id);
+});</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Jest API Testing</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">const request = require('supertest');
+const app = require('./app');
+
+describe('User API', () => {
+    test('GET /api/users', async () => {
+        const response = await request(app)
+            .get('/api/users')
+            .expect(200);
+        
+        expect(Array.isArray(response.body)).toBe(true);
+    });
+    
+    test('POST /api/users', async () => {
+        const userData = {
+            name: 'John Doe',
+            email: 'john@example.com'
+        };
+        
+        const response = await request(app)
+            .post('/api/users')
+            .send(userData)
+            .expect(201);
+        
+        expect(response.body.name).toBe(userData.name);
+        expect(response.body.email).toBe(userData.email);
+    });
+});</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Contract Testing</h3>
+                        <div class="practice-item">
+                            <h4>Consumer-Driven Contracts</h4>
+                            <p>Pact for testing API contracts between services</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>OpenAPI Validation</h4>
+                            <p>Validate responses against OpenAPI schemas</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Schema Testing</h4>
+                            <p>JSON Schema validation for API responses</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional API Types Section -->
+            <section class="apis-section" id="additional-apis">
+                <div class="section-header">
+                    <i class="fas fa-network-wired section-icon"></i>
+                    <h2>Additional API Types</h2>
+                    <p>Exploring other API protocols and patterns</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>WebSocket APIs</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">// WebSocket Server
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    
+    ws.on('message', (message) => {
+        console.log('Received:', message);
+        
+        // Broadcast to all clients
+        wss.clients.forEach((client) => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
+    });
+    
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+});</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>gRPC APIs</h3>
+                        <div class="code-block">
+                            <pre><code class="language-protobuf">// user.proto
+syntax = "proto3";
+
+service UserService {
+    rpc GetUser(GetUserRequest) returns (User);
+    rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+}
+
+message User {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message GetUserRequest {
+    string id = 1;
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>SOAP APIs</h3>
+                        <div class="practice-item">
+                            <h4>XML-based Protocol</h4>
+                            <p>Strict schema validation with WSDL</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Enterprise Integration</h4>
+                            <p>Common in enterprise environments</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>WS-Security</h4>
+                            <p>Built-in security standards</p>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>WebHooks</h3>
+                        <div class="practice-item">
+                            <h4>Event-Driven APIs</h4>
+                            <p>Server pushes data to clients</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Real-time Notifications</h4>
+                            <p>Instant event notifications</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Integration Patterns</h4>
+                            <p>Connect SaaS applications</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Tools & Documentation Section -->
+            <section class="apis-section" id="api-tools">
+                <div class="section-header">
+                    <i class="fas fa-tools section-icon"></i>
+                    <h2>API Tools & Documentation</h2>
+                    <p>Essential tools for API development and documentation</p>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <i class="fas fa-book tool-icon"></i>
+                        <h3>Swagger/OpenAPI</h3>
+                        <p>Standard for API documentation and specification</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-flask tool-icon"></i>
+                        <h3>Postman</h3>
+                        <p>API development, testing, and documentation platform</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-rocket tool-icon"></i>
+                        <h3>Insomnia</h3>
+                        <p>REST client and API testing tool</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-code tool-icon"></i>
+                        <h3>GraphQL Playground</h3>
+                        <p>Interactive GraphQL IDE for testing queries</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-chart-line tool-icon"></i>
+                        <h3>Paw</h3>
+                        <p>Advanced API client for macOS</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-shield-alt tool-icon"></i>
+                        <h3>OWASP ZAP</h3>
+                        <p>Security testing for APIs and web applications</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-tachometer-alt tool-icon"></i>
+                        <h3>k6</h3>
+                        <p>Modern load testing for APIs and microservices</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-server tool-icon"></i>
+                        <h3>Kong</h3>
+                        <p>API gateway and management platform</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="apis-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Josh Sylvia - APIs & Microservices Resources</p>
+            <div class="footer-links">
+                <a href="https://github.com/joshsylvia" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/joshsylvia" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-graphql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-protobuf.min.js"></script>
+    <script>
+        // Load navigation
+        fetch('components/navigation.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navigation-placeholder').innerHTML = html;
+                
+                // Add APIs link to navigation
+                const navMenu = document.querySelector('.nav-menu');
+                const sidebarNav = document.querySelector('.sidebar-nav');
+                
+                const apisLink = '<a href="apis.html" class="nav-link">APIs</a>';
+                const apisSidebarLink = '<li><a href="apis.html" class="sidebar-link">APIs</a></li>';
+                
+                navMenu.insertAdjacentHTML('beforeend', apisLink);
+                sidebarNav.insertAdjacentHTML('beforeend', apisSidebarLink);
+            });
+
+        // Smooth scrolling for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Automation - Software Testing Techniques</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/qa.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navigation-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="qa-hero">
+        <div class="qa-hero-content">
+            <h1>QA Automation & Testing</h1>
+            <p>Comprehensive software testing techniques and tools for modern development</p>
+            <div class="qa-hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Automated Testing</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-cloud"></i>
+                    <span>Cloud Testing</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitoring</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="qa-main">
+        <div class="qa-container">
+            
+            <!-- Selenium Section -->
+            <section class="qa-section" id="selenium">
+                <div class="section-header">
+                    <i class="fas fa-robot section-icon"></i>
+                    <h2>Selenium WebDriver</h2>
+                    <p>Industry-standard browser automation framework</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Getting Started</h3>
+                        <div class="code-block">
+                            <pre><code class="language-python"># Install Selenium
+pip install selenium
+
+# Basic WebDriver setup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Chrome()
+driver.get("https://example.com")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Key Features</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Multi-browser support (Chrome, Firefox, Safari, Edge)</li>
+                            <li><i class="fas fa-check"></i> Multiple language bindings (Python, Java, C#, JavaScript)</li>
+                            <li><i class="fas fa-check"></i> Advanced locators and wait strategies</li>
+                            <li><i class="fas fa-check"></i> Headless browser testing</li>
+                            <li><i class="fas fa-check"></i> Mobile testing with Appium</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Best Practices</h3>
+                        <div class="practice-item">
+                            <h4>Page Object Model</h4>
+                            <p>Separate page structure from test logic for maintainable tests</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Explicit Waits</h4>
+                            <p>Use WebDriverWait instead of Thread.sleep for reliable synchronization</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Test Data Management</h4>
+                            <p>Externalize test data and use fixtures for better test organization</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Playwright Section -->
+            <section class="qa-section" id="playwright">
+                <div class="section-header">
+                    <i class="fas fa-theater-masks section-icon"></i>
+                    <h2>Playwright</h2>
+                    <p>Modern browser automation by Microsoft</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Installation & Setup</h3>
+                        <div class="code-block">
+                            <pre><code class="language-javascript">// Install Playwright
+npm init playwright@latest
+
+// Basic test example
+import { test, expect } from '@playwright/test';
+
+test('basic test', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+  await expect(page).toHaveTitle(/Playwright/);
+});</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Advanced Features</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-bolt"></i> Auto-waiting for elements</li>
+                            <li><i class="fas fa-network-wired"></i> Network interception and mocking</li>
+                            <li><i class="fas fa-mobile-alt"></i> Mobile device emulation</li>
+                            <li><i class="fas fa-video"></i> Built-in video recording</li>
+                            <li><i class="fas fa-code-branch"></i> Parallel test execution</li>
+                            <li><i class="fas fa-clock"></i> Time travel debugging</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Playwright vs Selenium</h3>
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Playwright</th>
+                                        <th>Selenium</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Speed</td>
+                                        <td>⚡ Faster</td>
+                                        <td>🐢 Slower</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Reliability</td>
+                                        <td>✅ High</td>
+                                        <td>⚠️ Medium</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Setup</td>
+                                        <td>✅ Easy</td>
+                                        <td>⚠️ Complex</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Terraform Section -->
+            <section class="qa-section" id="terraform">
+                <div class="section-header">
+                    <i class="fas fa-cube section-icon"></i>
+                    <h2>Terraform Testing</h2>
+                    <p>Infrastructure as Code testing strategies</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Terratest Framework</h3>
+                        <div class="code-block">
+                            <pre><code class="language-go">package test
+
+import (
+    "testing"
+    "github.com/gruntwork-io/terratest/modules/terraform"
+    "github.com/stretchr/testify/assert"
+)
+
+func TestTerraformExample(t *testing.T) {
+    terraformOptions := &terraform.Options{
+        TerraformDir: "../examples",
+    }
+    
+    defer terraform.Destroy(t, terraformOptions)
+    terraform.InitAndApply(t, terraformOptions)
+    
+    output := terraform.Output(t, terraformOptions, "instance_ip")
+    assert.NotEmpty(t, output)
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Testing Strategies</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-shield-alt"></i> Security policy validation</li>
+                            <li><i class="fas fa-dollar-sign"></i> Cost estimation tests</li>
+                            <li><i class="fas fa-sync"></i> Drift detection</li>
+                            <li><i class="fas fa-lock"></i> Compliance checking</li>
+                            <li><i class="fas fa-server"></i> Resource validation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Best Practices</h3>
+                        <div class="practice-item">
+                            <h4>Use Test Environments</h4>
+                            <p>Always test in isolated environments before production</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Validate Outputs</h4>
+                            <p>Test that Terraform outputs match expected values</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Cleanup Resources</h4>
+                            <p>Ensure proper cleanup to avoid costs</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ansible Section -->
+            <section class="qa-section" id="ansible">
+                <div class="section-header">
+                    <i class="fas fa-cogs section-icon"></i>
+                    <h2>Ansible Testing</h2>
+                    <p>Configuration management and automation testing</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Molecule Framework</h3>
+                        <div class="code-block">
+                            <pre><code class="language-yaml"># molecule.yml
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: ubuntu:20.04
+provisioner:
+  name: ansible
+verifier:
+  name: testinfra</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Testing Approaches</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-flask"></i> Unit testing with pytest</li>
+                            <li><i class="fas fa-box"></i> Integration testing with Molecule</li>
+                            <li><i class="fas fa-server"></i> End-to-end testing</li>
+                            <li><i class="fas fa-code-branch"></i> Role testing</li>
+                            <li><i class="fas fa-shield-alt"></i> Security scanning</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Testinfra Example</h3>
+                        <div class="code-block">
+                            <pre><code class="language-python">import pytest
+
+def test_nginx_package(host):
+    nginx = host.package("nginx")
+    assert nginx.is_installed
+    assert nginx.version.startswith("1.18")
+
+def test_nginx_service(host):
+    nginx = host.service("nginx")
+    assert nginx.is_running
+    assert nginx.is_enabled</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cloud Testing Section -->
+            <section class="qa-section" id="cloud-testing">
+                <div class="section-header">
+                    <i class="fas fa-cloud section-icon"></i>
+                    <h2>Cloud Testing</h2>
+                    <p>Multi-cloud testing strategies and tools</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>AWS Testing Tools</h3>
+                        <ul class="feature-list">
+                            <li><i class="fab fa-aws"></i> AWS Device Farm - Mobile testing</li>
+                            <li><i class="fas fa-vial"></i> AWS X-Ray - Distributed tracing</li>
+                            <li><i class="fas fa-chart-line"></i> CloudWatch - Monitoring</li>
+                            <li><i class="fas fa-balance-scale"></i> AWS Step Functions - Workflow testing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Azure Testing Services</h3>
+                        <ul class="feature-list">
+                            <li><i class="fab fa-microsoft"></i> Azure DevOps Test Plans</li>
+                            <li><i class="fas fa-mobile-alt"></i> Azure App Center - Mobile testing</li>
+                            <li><i class="fas fa-tachometer-alt"></i> Azure Load Testing</li>
+                            <li><i class="fas fa-shield-alt"></i> Azure Security Center</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Performance Testing</h3>
+                        <div class="practice-item">
+                            <h4>Load Testing Tools</h4>
+                            <p>k6, JMeter, Gatling, Locust for cloud load testing</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Chaos Engineering</h4>
+                            <p>Gremlin, Chaos Monkey for resilience testing</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Cost Optimization</h4>
+                            <p>Test resource usage and optimize cloud spending</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monitoring Dashboards Section -->
+            <section class="qa-section" id="monitoring">
+                <div class="section-header">
+                    <i class="fas fa-chart-line section-icon"></i>
+                    <h2>Monitoring & Observability</h2>
+                    <p>Comprehensive monitoring solutions for QA</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Grafana Dashboards</h3>
+                        <div class="code-block">
+                            <pre><code class="language-json">{
+  "dashboard": {
+    "title": "QA Test Metrics",
+    "panels": [
+      {
+        "title": "Test Pass Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(test_passed) / sum(test_total) * 100"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Key Metrics</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Test execution time</li>
+                            <li><i class="fas fa-percentage"></i> Pass/fail rates</li>
+                            <li><i class="fas fa-bug"></i> Defect density</li>
+                            <li><i class="fas fa-clock"></i> Test coverage</li>
+                            <li><i class="fas fa-server"></i> System performance</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>Alerting Strategies</h3>
+                        <div class="practice-item">
+                            <h4>Real-time Alerts</h4>
+                            <p>Slack/Teams integration for test failures</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Performance Thresholds</h4>
+                            <p>Alert on response time degradation</p>
+                        </div>
+                        <div class="practice-item">
+                            <h4>Trend Analysis</h4>
+                            <p>Monitor test quality trends over time</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Tools Section -->
+            <section class="qa-section" id="additional-tools">
+                <div class="section-header">
+                    <i class="fas fa-tools section-icon"></i>
+                    <h2>Additional Testing Tools</h2>
+                    <p>Essential tools for comprehensive QA automation</p>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <i class="fas fa-code tool-icon"></i>
+                        <h3>Cypress</h3>
+                        <p>JavaScript E2E testing framework with excellent debugging</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-robot tool-icon"></i>
+                        <h3>Robot Framework</h3>
+                        <p>Keyword-driven testing for acceptance testing</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-vial tool-icon"></i>
+                        <h3>Postman/Newman</h3>
+                        <p>API testing and automation</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-mobile-alt tool-icon"></i>
+                        <h3>Appium</h3>
+                        <p>Mobile app automation testing</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-chart-bar tool-icon"></i>
+                        <h3>JMeter</h3>
+                        <p>Load and performance testing</p>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <i class="fas fa-shield-alt tool-icon"></i>
+                        <h3>OWASP ZAP</h3>
+                        <p>Security testing and vulnerability scanning</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="qa-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Josh Sylvia - QA Automation Resources</p>
+            <div class="footer-links">
+                <a href="https://github.com/joshsylvia" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/joshsylvia" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script>
+        // Load navigation
+        fetch('components/navigation.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navigation-placeholder').innerHTML = html;
+                
+                // Add QA link to navigation
+                const navMenu = document.querySelector('.nav-menu');
+                const sidebarNav = document.querySelector('.sidebar-nav');
+                
+                const qaLink = '<a href="qa.html" class="nav-link">QA</a>';
+                const qaSidebarLink = '<li><a href="qa.html" class="sidebar-link">QA</a></li>';
+                
+                navMenu.insertAdjacentHTML('beforeend', qaLink);
+                sidebarNav.insertAdjacentHTML('beforeend', qaSidebarLink);
+            });
+
+        // Smooth scrolling for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
