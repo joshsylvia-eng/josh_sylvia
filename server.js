@@ -1,3 +1,6 @@
+// Load path module first to ensure availability
+var path            = require('path');
+
 // modules =================================================
 var express         = require('express');
 var app             = express();
@@ -5,7 +8,6 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var compression     = require('compression');
 var http            = require('http');
-var path            = require('path');
 require('dotenv').config();
 
 // Enhanced logging for deployment debugging
