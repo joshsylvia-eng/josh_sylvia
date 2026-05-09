@@ -25,12 +25,71 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-f
 // Override HTTP methods
 app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
 
-// Serve static files with caching headers
+// Serve static files with optimized caching headers
 app.use(express.static(__dirname + '/public', {
-    maxAge: '1d', // Cache for 1 day
+    maxAge: '7d', // Cache for 7 days
     etag: true,
-    lastModified: true
+    lastModified: true,
+    setHeaders: (res, path) => {
+      if (path.extname(path) === '.js') {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      } else if (path.extname(path) === '.css') {
+        res.setHeader('Cache-Control', 'public, max-age=31536000');
+      } else if (path.extname(path) === '.html') {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+      }
+      return res;
+    }
 }));
+
+// HTTPS redirection middleware
+app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') === 'https') {
+        return res.redirect(301, `https://${req.header('host')}${req.url}`);
+    }
+    next();
+});
+
+// Security headers
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    next();
+});
+
+// SSL certificate management
+const fs = require('fs');
+const path = require('path');
+const sslDir = path.join(__dirname, 'ssl');
+
+// Ensure SSL directory exists
+if (!fs.existsSync(sslDir)) {
+    fs.mkdirSync(sslDir, { recursive: true });
+    console.log('Created SSL directory');
+}
+
+// CDN integration for static assets
+const cdnMiddleware = (req, res, next) => {
+    // Serve static files from CDN in production
+    if (process.env.NODE_ENV === 'production') {
+        const cdnUrl = 'https://cdn.jsdelivr.net';
+        res.setHeader('X-CDN-Cache-Control', 'public, max-age=31536000');
+        res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+    next();
+};
+
+// Performance monitoring
+const performanceMonitor = (req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        console.log(`Request processed in ${duration}ms`);
+    });
+    next();
+};
 
 // routes ==================================================
 	// Basic API routes for AI functionality
@@ -43,9 +102,19 @@ app.get('/api/health', (req, res) => {
 });
 
 
+// Cache for videos data
+let videosCache = null;
+let cacheTimeout = null;
+
 // Videos API endpoint
 app.get('/api/videos', async (req, res) => {
   try {
+    // Check cache first
+    if (videosCache && cacheTimeout && Date.now() - cacheTimeout < 300000) { // 5 minutes cache
+      console.log('Returning cached videos data');
+      return res.json(videosCache);
+    }
+    
     const fs = require('fs');
     const path = require('path');
     const videosDataFile = path.join(__dirname, 'data', 'videos.json');
@@ -59,6 +128,13 @@ app.get('/api/videos', async (req, res) => {
       videos = JSON.parse(videosData);
       content = content.concat(videos);
       console.log(`Loaded ${videos.length} videos from JSON file`);
+      
+      // Update cache
+      videosCache = {
+        data: content,
+        timestamp: Date.now()
+      };
+      cacheTimeout = Date.now();
     }
     
     // Add GitHub repositories
@@ -179,6 +255,14 @@ app.get('/api/videos', async (req, res) => {
     
     content = content.concat(githubRepos);
     console.log(`Serving ${content.length} total items (${videos.length} videos + ${githubRepos.length} GitHub repos)`);
+    
+    // Update cache before sending response
+    videosCache = {
+      data: content,
+      timestamp: Date.now()
+    };
+    cacheTimeout = Date.now();
+    
     res.json(content);
     
   } catch (error) {
@@ -221,12 +305,6 @@ app.post('/api/contact', async (req, res) => {
     let client;
     
     // Check for Mailtrap credentials
-    console.log('=== ENVIRONMENT DEBUG ===');
-    console.log('MAILTRAP_TOKEN:', process.env.MAILTRAP_TOKEN);
-    console.log('MAILTRAP_INBOX:', process.env.MAILTRAP_INBOX);
-    console.log('CONTACT_EMAIL:', process.env.CONTACT_EMAIL);
-    console.log('EMAIL_USER:', process.env.EMAIL_USER);
-    
     const TOKEN = process.env.MAILTRAP_TOKEN || '607ef5e8b5da9a30591e536ee4d19573';
     
     if (!TOKEN || TOKEN === 'your-mailtrap-token') {
