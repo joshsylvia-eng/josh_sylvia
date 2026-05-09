@@ -137,5 +137,42 @@
     </div>
 
     <script src="js/playground.js"></script>
+
+    <!-- Load Navigation Component -->
+    <script>
+        async function loadNavigation() {
+            try {
+                const response = await fetch('components/navigation.html');
+                const navigationHTML = await response.text();
+                document.getElementById('navigation-container').innerHTML = navigationHTML;
+                
+                // Set active page based on current URL
+                setActiveNavigation();
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+            }
+        }
+        
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            // Remove active classes
+            navLinks.forEach(link => link.classList.remove('active'));
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to current page links
+            if (currentPage === 'playground.html') {
+                document.querySelector('.nav-link[href="playground.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="playground.html"]')?.classList.add('active');
+            }
+        }
+        
+        // Load navigation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation();
+        });
+    </script>
 </body>
 </html>

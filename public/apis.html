@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APIs - REST, GraphQL, Microservices & Testing</title>
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/apis.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <div id="navigation-placeholder"></div>
+    <!-- Navigation Component -->
+    <div id="navigation-container"></div>
 
     <!-- Hero Section -->
     <section class="apis-hero">
@@ -653,6 +654,43 @@ message GetUserRequest {
                     }
                 });
             });
+        });
+    </script>
+    
+    <!-- Load Navigation Component -->
+    <script>
+        async function loadNavigation() {
+            try {
+                const response = await fetch('components/navigation.html');
+                const navigationHTML = await response.text();
+                document.getElementById('navigation-container').innerHTML = navigationHTML;
+                
+                // Set active page based on current URL
+                setActiveNavigation();
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+            }
+        }
+        
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            // Remove active classes
+            navLinks.forEach(link => link.classList.remove('active'));
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to current page links
+            if (currentPage === 'apis.html') {
+                document.querySelector('.nav-link[href="apis.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="apis.html"]')?.classList.add('active');
+            }
+        }
+        
+        // Load navigation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation();
         });
     </script>
 </body>

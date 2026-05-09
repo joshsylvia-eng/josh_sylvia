@@ -1,53 +1,17 @@
 <!-- Navigation Bar -->
         <nav class="top-nav">
-            <style>
-                .nav-container {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0 1rem;
-                }
-                .nav-brand {
-                    display: flex;
-                    align-items: center;
-                    text-decoration: none;
-                    color: inherit;
-                }
-                .logo-container img {
-                    height: 50px;
-                    width: 50px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    margin-right: 10px;
-                }
-                .brand-name {
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    margin-left: 10px;
-                }
-                .nav-menu {
-                    display: flex;
-                    align-items: center;
-                }
-                .nav-link {
-                    padding: 0.5rem 1rem;
-                    text-decoration: none;
-                    color: inherit;
-                    transition: color 0.3s ease;
-                }
-                .nav-link:hover {
-                    color: #007bff;
-                }
-                .nav-link.active {
-                    color: #007bff;
-                    font-weight: bold;
-                }
-            </style>
+            <link rel="stylesheet" href="css/navigation.css">
             <div class="nav-container">
                 <a href="index.html" class="nav-brand">
                     <div class="logo-container"><img src="images/nanook.jpg" alt="Josh Sylvia Tech" /></div>
                     <span class="brand-name">Josh Sylvia - Principal Software Engineer</span>
                 </a>
+                <div class="nav-spacer"></div>
+                <div class="nav-center">
+                    <button class="search-button" onclick="performSearch()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
                 <div class="nav-menu">
                     <a href="ai.html" class="nav-link">AI</a>
                     <a href="apis.html" class="nav-link">APIs</a>
@@ -89,3 +53,16 @@
                 </div>
                             </div>
         </aside>
+
+        <link rel="stylesheet" href="css/navigation.css">
+
+        <script>
+            function performSearch() {
+                const searchTerm = prompt('Enter search term:');
+                if (searchTerm) {
+                    console.log('Searching for:', searchTerm);
+                    // Implement search functionality here
+                    // For now, just log the search term
+                }
+            }
+        </script>

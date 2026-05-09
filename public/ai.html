@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Josh Sylvia Tech - AI Solutions</title>
-    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script type="module">
     import OpenAI from 'https://cdn.skypack.dev/openai';
     window.OpenAI = OpenAI;
 </script>
-    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/ai.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -128,6 +126,43 @@
     </section>
 
     <script src="js/ai.js"></script>
+
+    <!-- Load Navigation Component -->
+    <script>
+        async function loadNavigation() {
+            try {
+                const response = await fetch('components/navigation.html');
+                const navigationHTML = await response.text();
+                document.getElementById('navigation-container').innerHTML = navigationHTML;
+                
+                // Set active page based on current URL
+                setActiveNavigation();
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+            }
+        }
+        
+        function setActiveNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            // Remove active classes
+            navLinks.forEach(link => link.classList.remove('active'));
+            sidebarLinks.forEach(link => link.classList.remove('active'));
+            
+            // Add active class to current page links
+            if (currentPage === 'ai.html') {
+                document.querySelector('.nav-link[href="ai.html"]')?.classList.add('active');
+                document.querySelector('.sidebar-link[href="ai.html"]')?.classList.add('active');
+            }
+        }
+        
+        // Load navigation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation();
+        });
+    </script>
 
     <!-- Docker Information Section -->
     <section class="mcp-section">
