@@ -62,7 +62,6 @@ app.use((req, res, next) => {
 
 // SSL certificate management
 const fs = require('fs');
-const path = require('path');
 const sslDir = path.join(__dirname, 'ssl');
 
 // Ensure SSL directory exists
