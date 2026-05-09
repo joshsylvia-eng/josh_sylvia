@@ -61,9 +61,10 @@ app.use(express.static(__dirname + '/public', {
     }
 }));
 
-// HTTPS redirection middleware
+// HTTPS redirection middleware - fixed to prevent redirect loops
 app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') === 'https') {
+    // Only redirect if not already HTTPS and not an API call
+    if (req.header('x-forwarded-proto') !== 'https' && !req.url.startsWith('/api/')) {
         return res.redirect(301, `https://${req.header('host')}${req.url}`);
     }
     next();
