@@ -8,6 +8,16 @@ var http            = require('http');
 var path            = require('path');
 require('dotenv').config();
 
+// Enhanced logging for deployment debugging
+console.log('=== SERVER STARTUP DEBUGGING ===');
+console.log('Node.js version:', process.version);
+console.log('Environment:', process.env.NODE_ENV);
+console.log('Port:', process.env.PORT);
+console.log('Path module loaded:', typeof path !== 'undefined');
+console.log('Path.extname function:', typeof path.extname === 'function');
+console.log('Working directory:', __dirname);
+console.log('=== END DEBUGGING ===');
+
 // configuration ===========================================
 
 // PostgreSQL Database Configuration
@@ -31,12 +41,18 @@ app.use(express.static(__dirname + '/public', {
     maxAge: '7d', // Cache for 7 days
     etag: true,
     lastModified: true,
-    setHeaders: (res, path) => {
-      if (path.extname(path) === '.js') {
+    setHeaders: (res, filePath) => {
+      console.log('=== STATIC FILE DEBUGGING ===');
+      console.log('File path:', filePath);
+      console.log('Path module available:', typeof path !== 'undefined');
+      console.log('Path.extname available:', typeof path.extname === 'function');
+      console.log('=== END STATIC DEBUG ===');
+      
+      if (path.extname(filePath) === '.js') {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-      } else if (path.extname(path) === '.css') {
+      } else if (path.extname(filePath) === '.css') {
         res.setHeader('Cache-Control', 'public, max-age=31536000');
-      } else if (path.extname(path) === '.html') {
+      } else if (path.extname(filePath) === '.html') {
         res.setHeader('Cache-Control', 'public, max-age=86400');
       }
       return res;
